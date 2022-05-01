@@ -56,6 +56,23 @@ def read_notes(file):
         lines_result += process_line(line)
     return lines_result
 
+def print_bar(bar, lines):
+    for str_index, note in bar:
+        for i in range(6):
+            if (i+1) == str_index:
+                lines[i] += f"--{note}"
+            else:
+                lines[i] += "---"
+    for i, line in enumerate(lines):
+        lines[i] = f"{lines[i]}|"
+    return lines
+def print_organized_lines(lines, tab_length = 30):
+    lines = lines[::-1]
+    for i in range(0, len(lines[0]), tab_length):
+        for line in lines:
+            print(line[i :i+tab_length])
+        print("############################################################")
+
 def shift_bar(bar, shift):
     bar_result = []
     for note_pair in bar:
@@ -64,7 +81,7 @@ def shift_bar(bar, shift):
 if __name__ == "__main__":
     notes_data_struct = read_notes("music_file.txt")
     shifted_bars = [shift_bar(bar, -4) for bar in notes_data_struct]
-    for i, bar in enumerate(shifted_bars):
-        print(f"{bar} | ")
-        if i % 4 == 3:
-            print("\n")
+    lines = ["" for i in range(6)]
+    for bar in shifted_bars:
+        lines = print_bar(bar, lines)
+    print_organized_lines(lines)
